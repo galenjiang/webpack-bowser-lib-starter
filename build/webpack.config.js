@@ -1,96 +1,110 @@
-var path = require('path')
-var webpack = require("webpack")
-var HtmlWebpackPlugin = require("html-webpack-plugin")
+import path from 'path';
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-var debug = (process.env.NODE_ENV && process.env.NODE_ENV.trim()) != 'production';
+const debug = (process.env.NODE_ENV && process.env.NODE_ENV.trim()) !== 'production';
 
-console.log(debug)
 // 模块导入
 module.exports = {
 
-    // 入口文件地址，不需要写完，会自动查找
-    entry: {
-        main: [
-            './src/main'
-        ]
+  // 入口文件地址
+  entry: {
+    main: [
+      './src/main',
+    ],
+    vendor: [
+      'lodash',
+    ],
+  },
+
+  output: {
+    path: path.resolve(debug ? 'dev' : 'dist'),
+    filename: debug ? '[name].js' : '/js/[hash:8].[name].js',
+    chunkFilename: debug ? '[chunkhash].js' : '/js/[chunkhash:8].chunk.js',
+
+    // 公共文件生成的地址
+    publicPath: debug ? '' : '',
+  },
+
+  module: {
+    loaders: [
+
+      {
+        test: /\.js$/,
+        loader: 'babel',
+        exclude: /node_modules/,
+      },
+
+      // {
+      //     test: /\.css$/,
+      //     loader: 'style!css!autoprefixer?{browsers:["last 2 versions", "Android >= 4.0"]}'
+      // },
+
+      // {
+      //     test: /\.scss$/,
+      //     loader: 'style!css!autoprefixer?{browsers:["last 2 versions", "Android >= 4.0"]}!sass'
+      // },
+
+      // // 图片转化，小于8K自动转化为base64的编码
+      // {
+      //     test: /\.(png|jpg|gif)$/,
+      //     loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
+      // },
+
+      // {
+      //     test: /\.(woff|eot|ttf)$/i,
+      //     loader: 'url?limit=10000&name=fonts/[hash:8].[name].[ext]'
+      // },
+    ],
+  },
+
+  resolve: {
+
+    // require时省略的扩展名，如：require('module') 不需要module.js
+    extensions: ['', '.js'],
+
+    // 别名，可以直接使用别名来代表设定的路径以及其他
+    alias: {
+      components: path.join(__dirname, './src/components'),
     },
+  },
 
-    output: {
-        path: path.resolve(debug?'dev':'dist'),
-        filename: debug? '[name].js':'/js/[hash:8].[name].js',
-        chunkFilename: debug? '[chunkhash].js':'/js/[chunkhash:8].chunk.js',
+  plugins: [
 
-        // 公共文件生成的地址
-        publicPath: debug ? '' : ''
-    },
+    // 提供全局的变量，在模块中使用无需用require引入
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+    }),
 
-    module: {
-        loaders: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: './src/index.html',
+    }),
 
-            {
-                test: /\.js$/,
-                loader: 'babel',
-                exclude: /node_modules/
-            },
+    // 提公用js到common.js文件中
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'common',
+    //   chunks: ['main'],
+    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'js/[hash:8].[name].js',
+      minChunks: Infinity,
+    }),
+    // new webpack.DllPlugin({
+    //   path: path.join(__dirname, '../', 'dist', 'manifest.json'),
+    //   name: '[name]_[chunkhash]',
+    //   context: __dirname,
+    // }),
 
-            // {
-            //     test: /\.css$/,
-            //     loader: 'style!css!autoprefixer?{browsers:["last 2 versions", "Android >= 4.0"]}'
-            // },
-
-            // {
-            //     test: /\.scss$/,
-            //     loader: 'style!css!autoprefixer?{browsers:["last 2 versions", "Android >= 4.0"]}!sass'
-            // },
-
-            // // 图片转化，小于8K自动转化为base64的编码
-            // {
-            //     test: /\.(png|jpg|gif)$/,
-            //     loader: 'url-loader?limit=8192&name=images/[hash:8].[name].[ext]'
-            // },
-
-            // {
-            //     test: /\.(woff|eot|ttf)$/i,
-            //     loader: 'url?limit=10000&name=fonts/[hash:8].[name].[ext]'
-            // },
-        ]
-    },
-
-    resolve: {
-
-        // require时省略的扩展名，如：require('module') 不需要module.js
-        extensions: ['', '.js'],
-
-        // 别名，可以直接使用别名来代表设定的路径以及其他
-        alias: {
-            components: path.join(__dirname, './src/components')
-        }
-    },
-
-    plugins: [
-
-        //提供全局的变量，在模块中使用无需用require引入
-        // new webpack.ProvidePlugin({
-        //     Vue: "vue",
-        //     wx: "weixin-js-sdk",
-        //     _: "lodash"
-        // }),
-
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './src/index.html'
-        }),
-        // new HtmlWebpackPlugin({
-        //     inject: false,
-        //     filename: 'clear.html',
-        //     template: './src/clear.html'
-        // })
-
-        //提公用js到common.js文件中
-        //new webpack.optimize.CommonsChunkPlugin('common','common.js')
-    ]
+    // new webpack.DllReferencePlugin({
+    //   context: __dirname,
+    //   mainfest: console.log(__dirname) || require('../dist/manifest.json'),
+    // }),
+  ],
 
 };
+
 
 
 

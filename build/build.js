@@ -1,25 +1,25 @@
 // 全局配置
-import webpack from 'webpack'
-import chalk from 'chalk'
-import webpackConfig from './webpack.config.js'
+import webpack from 'webpack';
+// import chalk from 'chalk';
+import webpackConfig from './webpack.config';
 
-let config = Object.create(webpackConfig);
+const config = Object.create(webpackConfig);
 
 config.plugins.unshift(new webpack.optimize.UglifyJsPlugin({
-    compress: {
-        warnings: false
-    }
-}))
+  compress: {
+    warnings: false,
+  },
+}));
 
 
-webpack(config, function (err, stats) {
-    if (err) throw err
+webpack(config, (err, stats) => {
+  if (err) throw err;
 
-    process.stdout.write(stats.toString({
+  process.stdout.write(`${stats.toString({
     colors: true,
     modules: false,
     children: false,
     chunks: false,
-    chunkModules: false
-  }) + '\n')
-})
+    chunkModules: false,
+  })}\n`);
+});
