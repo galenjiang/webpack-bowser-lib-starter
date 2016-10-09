@@ -4,8 +4,9 @@
   "description": "a scaffold to build a project with webpack\r #",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && set NODE_ENV=production  & babel-node build/build.js",
-    "dev": "babel-node build/dev-server.js"
+    "build": "rm -rf ./dist/js && set NODE_ENV=production & babel-node build/build",
+    "dll": "rm -rf dist && set NODE_ENV=production-dll & babel-node build/build",
+    "dev": "set NODE_ENV=debug & babel-node build/dev-server.js"
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,8 @@
     "html-webpack-plugin": "^2.22.0",
     "webpack": "^1.13.2",
     "webpack-browser-plugin": "^1.0.12",
-    "webpack-dev-server": "^1.16.1"
+    "webpack-dev-server": "^1.16.1",
+    "webpack-merge": "^0.14.1"
   },
   "dependencies": {
     "babel-polyfill": "^6.16.0",

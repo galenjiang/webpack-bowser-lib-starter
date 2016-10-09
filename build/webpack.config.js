@@ -2,19 +2,22 @@ import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-const debug = (process.env.NODE_ENV && process.env.NODE_ENV.trim()) !== 'production';
+const debug = process.env.NODE_ENV.trim() === 'debug';
 
 // 模块导入
 module.exports = {
 
   // 入口文件地址
   entry: {
-    main: [
-      './src/main',
+    index: [
+      './src/index',
     ],
-    vendor: [
-      'lodash',
+    about: [
+      './src/about',
     ],
+    // vendor: [
+    //   'lodash',
+    // ],
   },
 
   output: {
@@ -65,38 +68,41 @@ module.exports = {
 
     // 别名，可以直接使用别名来代表设定的路径以及其他
     alias: {
-      components: path.join(__dirname, './src/components'),
+      // components: path.join(__dirname, './src/components'),
     },
   },
 
   plugins: [
 
     // 提供全局的变量，在模块中使用无需用require引入
-    new webpack.ProvidePlugin({
-      _: 'lodash',
-    }),
-
+    
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: './src/index.html',
+      chunks: ['index', 'common'],
+    }),
+
+    new HtmlWebpackPlugin({
+      filename: 'about.html',
+      template: './src/about.html',
+      chunks: ['about', 'common'],
     }),
 
     // 提公用js到common.js文件中
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'common',
-    //   chunks: ['main'],
-    // }),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'js/[hash:8].[name].js',
-      minChunks: Infinity,
+      name: 'common',
+      chunks: ['index', 'about'],
     }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   filename: 'js/[hash:8].[name].js',
+    //   minChunks: Infinity,
+    // }),
     // new webpack.DllPlugin({
     //   path: path.join(__dirname, '../', 'dist', 'manifest.json'),
     //   name: '[name]_[chunkhash]',
     //   context: __dirname,
     // }),
-
     // new webpack.DllReferencePlugin({
     //   context: __dirname,
     //   mainfest: console.log(__dirname) || require('../dist/manifest.json'),
@@ -104,7 +110,3 @@ module.exports = {
   ],
 
 };
-
-
-
-

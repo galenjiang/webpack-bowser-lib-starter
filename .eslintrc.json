@@ -6,6 +6,8 @@
     //     "import"
     // ]
     "rules": {
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "import/no-extraneous-dependencies": "
     }
+} }
 }

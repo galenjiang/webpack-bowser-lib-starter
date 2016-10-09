@@ -1,21 +1,31 @@
 import webpack from 'webpack';
+import merge from 'webpack-merge';
 import WebpackDevServer from 'webpack-dev-server';
 import WebpackBrowserPlugin from 'webpack-browser-plugin';
 import chalk from 'chalk';
 import webpackConfig from './webpack.config';
 
 
-const config = Object.create(webpackConfig);
+const config = merge(webpackConfig, {
+  entry: {
+    index: ['webpack-dev-server/client?http://0.0.0.0:9090/', 'webpack/hot/dev-server']
+  },
 
-// 修改配置
-config.entry.main.unshift('webpack-dev-server/client?http://0.0.0.0:9090/', 'webpack/hot/dev-server');
-config.devtool = 'eval-source-map';
-config.plugins.unshift(new webpack.HotModuleReplacementPlugin(), new WebpackBrowserPlugin({
-  // browser: 'chrome',
-  port: 9090,
-  // url: 'http://192.168.0.50'
-}));
+  devtool: 'eval-source-map',
+  
+  plugins: [
 
+    new webpack.ProvidePlugin({
+      _: 'lodash',
+    }),
+    
+    new webpack.HotModuleReplacementPlugin(), new WebpackBrowserPlugin({
+    browser: 'chrome',
+    port: 9090,
+    url: 'http://localhost'
+})
+  ]
+})
 
 new WebpackDevServer(webpack(config), {
   contentBase: 'dev',
