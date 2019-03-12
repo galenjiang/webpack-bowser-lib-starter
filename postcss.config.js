@@ -6,7 +6,7 @@ module.exports = {
     plugins: [
         cssnano({
             preset: ['default', {
-                // TODO: not clear the mechanism
+                // TODO.md: not clear the mechanism
                 // autoprefixer: true
             }]
         }),

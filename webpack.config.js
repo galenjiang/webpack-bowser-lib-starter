@@ -2,13 +2,13 @@ const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+//const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-// TODO: Is it needed?
+// TODO.md: Is it needed?
 // const DeclarationBundlerPlugin = require('webpack-plugin-typescript-declaration-bundler');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     devtool: "source-map",
     // Change to your "entry-point".
     entry: {
@@ -33,15 +33,15 @@ module.exports = {
     },
     module: {
         rules: [
-            {
-                // Include ts, tsx, js, and jsx files.
-                test: /\.(ts|js)x?$/,
-                exclude: /node_modules/,
-                use: [
-                    'ts-loader'
-                ],
-                enforce: 'pre'
-            },
+            // {
+            //     // Include ts, tsx, js, and jsx files.
+            //     test: /\.(ts|js)x?$/,
+            //     exclude: /node_modules/,
+            //     use: [
+            //         'ts-loader'
+            //     ],
+            //     enforce: 'pre'
+            // },
             {
                 oneOf: [
                     {
@@ -50,7 +50,10 @@ module.exports = {
                         exclude: /node_modules/,
                         // loader: 'babel-loader',
                         use: [
-                            'babel-loader'
+                            'babel-loader',
+                            // {
+                            //     loader: 'ts-loader',
+                            // }
                         ]
                     },
                     {
@@ -68,7 +71,7 @@ module.exports = {
                             {
                                 loader: 'css-loader',
                                 options: {
-                                    importLoaders: 2,
+                                    importLoaders: 1,
                                     url: (url, resourcePath) => {
                                         return url.includes('www.sogou.com');
                                     },
@@ -77,9 +80,9 @@ module.exports = {
                             {
                                 loader: 'postcss-loader',
                             },
-                            {
-                                loader: 'sass-loader'
-                            }
+                            // {
+                            //     loader: 'sass-loader'
+                            // }
                         ]
                     },
                     {
@@ -99,12 +102,12 @@ module.exports = {
     },
     // optimization: {
     //     minimizer: [
-    //         // TODO:
+    //         // TODO.md:
     //         /**
-    //          * While webpack 5 is likely to come with a CSS minimizer built-in, 
-    //          * with webpack 4 you need to bring your own. To minify the output, 
+    //          * While webpack 5 is likely to come with a CSS minimizer built-in,
+    //          * with webpack 4 you need to bring your own. To minify the output,
     //          * use a plugin like optimize-css-assets-webpack-plugin. Setting optimization.
-    //          * minimizer overrides the defaults provided by webpack, 
+    //          * minimizer overrides the defaults provided by webpack,
     //          * so make sure to also specify a JS minimizer:
     //          **/
     //         new UglifyJsPlugin({
