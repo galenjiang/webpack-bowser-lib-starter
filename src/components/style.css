@@ -1,10 +1,10 @@
 @import './other.css';
 
 body {
-    background-color: #ccc;
-    background-image: url(www.sogou.com);
-    & div{
-        display: flex;
-        /* display: -webkit-flex; */
-    }
+  background-color: #ccc;
+  background-image: url(http://www.sogou.com);
+  & div {
+    display: flex;
+    /* display: -webkit-flex; */
+  }
 }

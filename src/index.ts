@@ -1,18 +1,10 @@
-// import '../node_modules/my-module/index.js'
+// import React from 'react'
+//
+//
+// export default function Hello() {
+//   return <div>hello</div>
+// }
 
+import { hello } from './hello'
 
-import { hello, Test } from './components/hello-world'
-
-
-let a = new Test()
-
-
-
-//import { hello as h } from 'test-type'
-// import './components/h'
-
-//h('a')
-
-class b {
-    a: string
-}
+export { hello }
