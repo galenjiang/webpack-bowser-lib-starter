@@ -40,6 +40,12 @@ module.exports = {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
+      {
         oneOf: [
           {
             // Include ts, tsx, js, and jsx files.
@@ -68,9 +74,8 @@ module.exports = {
                 loader: 'css-loader',
                 options: {
                   importLoaders: 1,
-                  url: (url, resourcePath) => {
-                    return url.includes('http://www.xxx.com')
-                  },
+                  url: (url, resourcePath) =>
+                    url.includes('http://www.xxx.com'),
                 },
               },
               {
